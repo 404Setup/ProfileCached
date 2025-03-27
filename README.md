@@ -9,6 +9,13 @@ Cache online player profiles to reduce requests to the authentication server.
 
 **Non-OnlineMode and use of third-party Yggdrasil servers are not supported.**
 
+## Command
+- `/pfc reload`
+- `/pfc clean <playername>`
+- `/pfc cleanall`
+
+**All commands require administrator permission.**
+
 ## Download 
 
 - [Modrinth](https://modrinth.com/mod/profile-cached)
