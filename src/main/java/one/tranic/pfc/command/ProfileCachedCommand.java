@@ -3,7 +3,7 @@ package one.tranic.pfc.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.command.CommandSource;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -13,7 +13,7 @@ import one.tranic.pfc.config.Config;
 @SuppressWarnings("unused")
 public class ProfileCachedCommand {
     public static void register() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             register(dispatcher);
         });
     }
@@ -43,7 +43,7 @@ public class ProfileCachedCommand {
     private static int reload(ServerCommandSource source) {
         Config.reload();
 
-        source.sendFeedback(() -> Text.of("Profile Cached Profile is reloaded!"), true);
+        source.sendFeedback(Text.of("Profile Cached Profile is reloaded!"), true);
         return 1;
     }
 
@@ -51,27 +51,27 @@ public class ProfileCachedCommand {
         var source = ctx.getSource();
         var cache = Config.getCachedMain().cache();
         if (cache == null) {
-            source.sendFeedback(() -> Text.of("Profile Cached Profile is not enabled!"), true);
+            source.sendFeedback(Text.of("Profile Cached Profile is not enabled!"), true);
             return 0;
         }
         cache.invalidateAll();
-        source.sendFeedback(() -> Text.of("All caches have been cleaned!"), true);
+        source.sendFeedback(Text.of("All caches have been cleaned!"), true);
         return 1;
     }
 
     private static int cleanPlayer(CommandContext<ServerCommandSource> ctx, String player) {
         var source = ctx.getSource();
         if (Config.getCachedMain().cache() == null) {
-            source.sendFeedback(() -> Text.of("Profile Cached Profile is not enabled!"), true);
+            source.sendFeedback(Text.of("Profile Cached Profile is not enabled!"), true);
             return 0;
         }
         var result = Config.getCachedMain().cache().getIfPresent(player);
         if (result == null) {
-            source.sendFeedback(() -> Text.of("Player " + player + " is not cached!"), true);
+            source.sendFeedback(Text.of("Player " + player + " is not cached!"), true);
             return 0;
         }
         Config.getCachedMain().cache().invalidate(player);
-        source.sendFeedback(() -> Text.of("Cache for player " + player + " has been cleaned!"), true);
+        source.sendFeedback(Text.of("Cache for player " + player + " has been cleaned!"), true);
         return 1;
     }
 }

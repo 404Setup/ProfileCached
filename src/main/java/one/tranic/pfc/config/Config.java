@@ -2,7 +2,7 @@ package one.tranic.pfc.config;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.mojang.authlib.yggdrasil.ProfileResult;
+import com.mojang.authlib.GameProfile;
 import net.fabricmc.loader.api.FabricLoader;
 import one.tranic.pfc.config.mods.CachedMain;
 import org.simpleyaml.configuration.file.YamlConfiguration;
@@ -56,7 +56,7 @@ public final class Config {
         var enabled = configuration.getBoolean("enabled");
         var resultTimeout = configuration.getInt("result-timeout");
         if (resultTimeout < 10) resultTimeout = 10;
-        Cache<String, ProfileResult> cache = enabled ? Caffeine.newBuilder()
+        Cache<String, GameProfile> cache = enabled ? Caffeine.newBuilder()
                 .expireAfterWrite(resultTimeout, java.util.concurrent.TimeUnit.MINUTES)
                 .build() : null;
         CACHED_MAIN = new CachedMain(enabled, debug, resultTimeout, cache);
