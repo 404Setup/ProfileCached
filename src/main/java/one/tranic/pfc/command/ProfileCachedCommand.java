@@ -37,6 +37,8 @@ public class ProfileCachedCommand {
                         .executes((ctx) -> cleanPlayer(ctx, StringArgumentType.getString(ctx, "player"))))
         );
 
+        rootCommand.then(CommandManager.literal("size").executes(ProfileCachedCommand::size));
+
         dispatcher.register(rootCommand);
     }
 
@@ -51,7 +53,7 @@ public class ProfileCachedCommand {
         var source = ctx.getSource();
         var cache = Config.getCachedMain().cache();
         if (cache == null) {
-            source.sendFeedback(() -> Text.of("Profile Cached Profile is not enabled!"), true);
+            source.sendFeedback(() -> Text.of("Profile Cached Profile is not enabled!"), false);
             return 0;
         }
         cache.invalidateAll();
@@ -62,7 +64,7 @@ public class ProfileCachedCommand {
     private static int cleanPlayer(CommandContext<ServerCommandSource> ctx, String player) {
         var source = ctx.getSource();
         if (Config.getCachedMain().cache() == null) {
-            source.sendFeedback(() -> Text.of("Profile Cached Profile is not enabled!"), true);
+            source.sendFeedback(() -> Text.of("Profile Cached Profile is not enabled!"), false);
             return 0;
         }
         var result = Config.getCachedMain().cache().getIfPresent(player);
@@ -72,6 +74,17 @@ public class ProfileCachedCommand {
         }
         Config.getCachedMain().cache().invalidate(player);
         source.sendFeedback(() -> Text.of("Cache for player " + player + " has been cleaned!"), true);
+        return 1;
+    }
+
+    private static int size(CommandContext<ServerCommandSource> ctx) {
+        var source = ctx.getSource();
+        var cache = Config.getCachedMain().cache();
+        if (cache == null) {
+            source.sendFeedback(() -> Text.of("Profile Cached Profile is not enabled!"), false);
+            return 0;
+        }
+        source.sendFeedback(() -> Text.of("Profile Cached Size: " + cache.estimatedSize()), true);
         return 1;
     }
 }
