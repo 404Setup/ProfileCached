@@ -2,9 +2,9 @@ package one.tranic.pfc.config;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.mojang.authlib.GameProfile;
 import net.fabricmc.loader.api.FabricLoader;
 import one.tranic.pfc.config.mods.CachedMain;
+import one.tranic.pfc.config.mods.PlayData;
 import org.simpleyaml.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -22,10 +22,6 @@ public final class Config {
     }
 
     public static synchronized void reload() {
-        if (CACHED_MAIN != null && CACHED_MAIN.enabled() && CACHED_MAIN.cache() != null) {
-            CACHED_MAIN.cache().invalidateAll();
-            CACHED_MAIN = null;
-        }
         configFile = getConfigDirectory().resolve("ProfileCached.yml").toFile();
         try {
             if (!configFile.exists()) {
@@ -46,6 +42,7 @@ public final class Config {
         configuration.addDefault("enabled", true);
         configuration.addDefault("debug", false);
         configuration.addDefault("result-timeout", 1440);
+        configuration.addDefault("verify-last-ip", false);
 
         configuration.options().copyDefaults(true);
         configuration.save(configFile);
@@ -55,11 +52,27 @@ public final class Config {
         var debug = configuration.getBoolean("debug");
         var enabled = configuration.getBoolean("enabled");
         var resultTimeout = configuration.getInt("result-timeout");
+        var verifyLastIP = configuration.getBoolean("verify-last-ip");
         if (resultTimeout < 10) resultTimeout = 10;
-        Cache<String, GameProfile> cache = enabled ? Caffeine.newBuilder()
-                .expireAfterWrite(resultTimeout, java.util.concurrent.TimeUnit.MINUTES)
-                .build() : null;
-        CACHED_MAIN = new CachedMain(enabled, debug, resultTimeout, cache);
+        Cache<String, PlayData> cache;
+        if (CACHED_MAIN != null) {
+            if (CACHED_MAIN.enabled() != enabled || CACHED_MAIN.resultTimeout() != resultTimeout) {
+                if (CACHED_MAIN.cache() != null)
+                    CACHED_MAIN.cache().invalidateAll();
+                cache = enabled ? createCache(resultTimeout) : null;
+            } else {
+                cache = CACHED_MAIN.cache();
+            }
+        } else {
+            cache = enabled ? createCache(resultTimeout) : null;
+        }
+        CACHED_MAIN = new CachedMain(enabled, debug, verifyLastIP, resultTimeout, cache);
+    }
+
+    private static Cache<String, PlayData> createCache(int timeout) {
+        return Caffeine.newBuilder()
+                .expireAfterWrite(timeout, java.util.concurrent.TimeUnit.MINUTES)
+                .build();
     }
 
     public static CachedMain getCachedMain() {

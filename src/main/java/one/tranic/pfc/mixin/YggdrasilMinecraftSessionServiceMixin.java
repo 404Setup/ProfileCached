@@ -6,6 +6,7 @@ import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
 import one.tranic.pfc.ProfileCached;
 import one.tranic.pfc.config.Config;
+import one.tranic.pfc.config.mods.PlayData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,12 +18,26 @@ import java.net.InetAddress;
 public abstract class YggdrasilMinecraftSessionServiceMixin implements MinecraftSessionService {
     @Inject(method = "hasJoinedServer", at = @At("HEAD"), cancellable = true, remap = false)
     public void preHasJoinedServer(GameProfile user, String serverId, InetAddress address, CallbackInfoReturnable<GameProfile> cir) throws AuthenticationUnavailableException {
-        if (Config.getCachedMain().enabled() && Config.getCachedMain().cache() != null) {
-            var cached = Config.getCachedMain().cache().getIfPresent(user.getName());
+        var config = Config.getCachedMain();
+        if (config.enabled() && config.cache() != null) {
+            var cached = config.cache().getIfPresent(user.getName());
             if (cached != null) {
-                if (Config.getCachedMain().debug())
+                if (config.verifyLastIP()
+                        && address != null
+                        && cached.lastLoginIP() != null
+                        && !cached.lastLoginIP().equals(address.getHostAddress())
+                ) {
+                    if (config.debug())
+                        ProfileCached.LOGGER.info("Hit Cache, but IPs do not match: username={}, serverId={}, address={}, cachedIP={}", user.getName(), serverId, address, cached.lastLoginIP());
+
+                    // If the player's IP changes during the caching period, then invalidate the cache.
+                    // Call return here to continue with the original validation logic.
+                    config.cache().invalidate(user.getName());
+                    return;
+                }
+                if (config.debug())
                     ProfileCached.LOGGER.info("Hit Cache: username={}, serverId={}, address={}", user.getName(), serverId, address);
-                cir.setReturnValue(cached);
+                cir.setReturnValue(cached.profile());
             }
         }
     }
@@ -30,9 +45,15 @@ public abstract class YggdrasilMinecraftSessionServiceMixin implements Minecraft
     @Inject(method = "hasJoinedServer", at = @At("RETURN"), remap = false)
     public void postHasJoinedServer(GameProfile user, String serverId, InetAddress address, CallbackInfoReturnable<GameProfile> cir) throws AuthenticationUnavailableException {
         var result = cir.getReturnValue();
-        if (result != null && Config.getCachedMain().enabled() && Config.getCachedMain().cache() != null) {
-            Config.getCachedMain().cache().put(user.getName(), result);
-            if (Config.getCachedMain().debug())
+        var config = Config.getCachedMain();
+        if (result != null && config.enabled() && config.cache() != null) {
+            var playerAddress = address != null ? address.getHostAddress() : null;
+            config.cache().put(user.getName(),
+                    new PlayData(result,
+                            config.verifyLastIP()
+                                    ? playerAddress
+                                    : null));
+            if (config.debug())
                 ProfileCached.LOGGER.info("Cache is saved: username={}, serverId={}, address={}", user.getName(), serverId, address);
         }
     }

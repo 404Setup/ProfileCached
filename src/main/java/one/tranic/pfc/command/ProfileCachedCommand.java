@@ -37,6 +37,9 @@ public class ProfileCachedCommand {
                         .executes((ctx) -> cleanPlayer(ctx, StringArgumentType.getString(ctx, "player"))))
         );
 
+        rootCommand.then(CommandManager.literal("stats"))
+                .executes(ProfileCachedCommand::stats);
+
         dispatcher.register(rootCommand);
     }
 
@@ -56,6 +59,26 @@ public class ProfileCachedCommand {
         }
         cache.invalidateAll();
         source.sendFeedback(Text.of("All caches have been cleaned!"), true);
+        return 1;
+    }
+
+    private static int stats(CommandContext<ServerCommandSource> ctx) {
+        var source = ctx.getSource();
+        var cache = Config.getCachedMain().cache();
+        if (cache == null) {
+            source.sendFeedback(Text.of("Profile Cached Profile is not enabled!"), true);
+            return 0;
+        }
+        var stats = cache.stats();
+        source.sendFeedback(Text.of("==== Profile Cached Stats ===="), true);
+        source.sendFeedback(Text.of("Cache Size: " + cache.estimatedSize()), true);
+        source.sendFeedback(Text.of("Cache hits: " + stats.hitCount()), true);
+        source.sendFeedback(Text.of("Cache misses: " + stats.missCount()), true);
+        source.sendFeedback(Text.of("Load successes: " + stats.loadSuccessCount()), true);
+        source.sendFeedback(Text.of("Load failures: " + stats.loadFailureCount()), true);
+        source.sendFeedback(Text.of("Total load time: " + stats.totalLoadTime() + " ns"), true);
+        source.sendFeedback(Text.of("Eviction count: " + stats.evictionCount()), true);
+        source.sendFeedback(Text.of("==== ******************* ===="), true);
         return 1;
     }
 
