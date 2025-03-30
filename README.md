@@ -23,6 +23,7 @@ You need to think about it before doing this.
 - `/pfc reload`
 - `/pfc clean <playername>`
 - `/pfc cleanall`
+- `/pfc size`
 
 **All commands require administrator permission.**
 
