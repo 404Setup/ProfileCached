@@ -2,8 +2,7 @@ package one.tranic.pfc.config;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.mojang.authlib.yggdrasil.ProfileResult;
-import net.fabricmc.loader.api.FabricLoader;
+import net.minecraftforge.fml.loading.FMLPaths;
 import one.tranic.pfc.config.mods.CachedMain;
 import one.tranic.pfc.config.mods.PlayData;
 import org.simpleyaml.configuration.file.YamlConfiguration;
@@ -19,7 +18,7 @@ public final class Config {
     private static CachedMain CACHED_MAIN;
 
     public static Path getConfigDirectory() {
-        return FabricLoader.getInstance().getConfigDir();
+        return FMLPaths.CONFIGDIR.get();
     }
 
     public static synchronized void reload() {

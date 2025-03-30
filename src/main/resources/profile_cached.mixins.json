@@ -3,7 +3,9 @@
   "minVersion": "0.8",
   "package": "one.tranic.pfc.mixin",
   "compatibilityLevel": "JAVA_17",
+  "refmap": "profile_cached.refmap.json",
   "mixins": [
+    "ServerLoginPacketListenerImplMixin",
     "YggdrasilMinecraftSessionServiceMixin"
   ],
   "client": [
