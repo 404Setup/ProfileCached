@@ -2,7 +2,7 @@ package one.tranic.pfc.config;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import net.minecraftforge.fml.loading.FMLPaths;
+import net.neoforged.fml.loading.FMLPaths;
 import one.tranic.pfc.config.mods.CachedMain;
 import one.tranic.pfc.config.mods.PlayData;
 import org.simpleyaml.configuration.file.YamlConfiguration;

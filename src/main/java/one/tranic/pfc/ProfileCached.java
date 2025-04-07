@@ -1,10 +1,8 @@
 package one.tranic.pfc;
 
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import one.tranic.pfc.config.Config;
 import org.slf4j.Logger;
 
@@ -16,12 +14,8 @@ public class ProfileCached {
     // Directly reference a slf4j logger
     public static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger("Profile Cached");
 
-    public ProfileCached(FMLJavaModLoadingContext context) {
-        IEventBus modEventBus = context.getModEventBus();
-
-        modEventBus.addListener(this::commonSetup);
-
-        MinecraftForge.EVENT_BUS.register(this);
+    public ProfileCached(IEventBus bus) {
+        bus.addListener(this::commonSetup);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
