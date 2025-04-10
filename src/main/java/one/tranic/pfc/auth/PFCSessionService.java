@@ -8,6 +8,7 @@ import com.mojang.authlib.yggdrasil.ProfileResult;
 import com.mojang.authlib.yggdrasil.ServicesKeySet;
 import com.mojang.authlib.yggdrasil.YggdrasilEnvironment;
 import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
+import net.minecraft.network.chat.Component;
 import one.tranic.pfc.ProfileCached;
 import one.tranic.pfc.config.Config;
 import one.tranic.pfc.config.mods.PlayData;
@@ -44,15 +45,22 @@ public class PFCSessionService extends YggdrasilMinecraftSessionService {
                         && !cached.lastLoginIP().equals(address.getHostAddress())
                 ) {
                     if (config.debug())
-                        ProfileCached.LOGGER.info("Hit Cache, but IPs do not match: username={}, serverId={}, address={}, cachedIP={}", profileName, serverId, address, cached.lastLoginIP());
+                        ProfileCached.LOGGER.info(
+                                Component.translatable("tranic.pfc.session.hit_failed", profileName, serverId,
+                                        address.getHostAddress(), cached.lastLoginIP()).getString()
+                        );
 
                     // If the player's IP changes during the caching period, then invalidate the cache.
                     // Call return here to continue with the original validation logic.
                     config.cache().invalidate(profileName);
-                    return postHasJoinedServer(super.hasJoinedServer(profileName, serverId, address), profileName, serverId, address);
+                    return postHasJoinedServer(super.hasJoinedServer(profileName, serverId, address),
+                            profileName, serverId, address);
                 }
                 if (config.debug())
-                    ProfileCached.LOGGER.info("Hit Cache: username={}, serverId={}, address={}", profileName, serverId, address);
+                    ProfileCached.LOGGER.info(
+                            Component.translatable("tranic.pfc.session.hit_success",
+                                    profileName, serverId, cached.lastLoginIP()).getString()
+                    );
                 return cached.profile();
             }
         }
@@ -69,7 +77,10 @@ public class PFCSessionService extends YggdrasilMinecraftSessionService {
                                     ? playerAddress
                                     : null));
             if (config.debug())
-                ProfileCached.LOGGER.info("Cache is saved: username={}, serverId={}, address={}", profileName, serverId, address);
+                ProfileCached.LOGGER.info(
+                        Component.translatable("tranic.pfc.session.cached_saved", profileName,
+                                serverId, playerAddress).getString()
+                );
         }
         return result;
     }

@@ -17,7 +17,7 @@ public class ProfileCached {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         LOGGER.warn("ProfileCached is not compatible with non-OnlineMode accounts!");
-        LOGGER.warn("(i.e. accounts that do not perform account verification, or accounts that use the third-party Yggdrasil verification server)");
+        LOGGER.warn("(i.e. accounts that do not perform account verification, or accounts that use the third-party Yggdrasil verification serve");
         Config.reload();
     }
 }
