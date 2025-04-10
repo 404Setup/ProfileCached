@@ -12,7 +12,6 @@ import net.minecraft.network.chat.Component;
 import one.tranic.pfc.ProfileCached;
 import one.tranic.pfc.config.Config;
 import one.tranic.pfc.config.mods.PlayData;
-import one.tranic.pfc.helpful.YggdrasilProxyHelpful;
 
 import javax.annotation.Nullable;
 import java.net.InetAddress;
@@ -20,7 +19,7 @@ import java.net.Proxy;
 
 public class PFCSessionService extends YggdrasilMinecraftSessionService {
     protected PFCSessionService(ServicesKeySet servicesKeySet, Proxy proxy, Environment env) {
-        super(servicesKeySet, YggdrasilProxyHelpful.determineProxy(proxy), env);
+        super(servicesKeySet, proxy, env);
     }
 
     public static MinecraftSessionService create(ServicesKeySet servicesKeySet, Proxy proxy) {
