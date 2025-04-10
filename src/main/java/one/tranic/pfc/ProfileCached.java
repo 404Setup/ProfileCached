@@ -6,12 +6,9 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import one.tranic.pfc.config.Config;
 import org.slf4j.Logger;
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(ProfileCached.MODID)
 public class ProfileCached {
-    // Define mod id in a common place for everything to reference
     public static final String MODID = "profile_cached";
-    // Directly reference a slf4j logger
     public static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger("Profile Cached");
 
     public ProfileCached(IEventBus bus) {

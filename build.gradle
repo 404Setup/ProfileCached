@@ -100,6 +100,8 @@ configurations {
 dependencies {
     implementation(jarJar("com.github.Carleslc.Simple-YAML:Simple-Yaml:1.8.4"))
     implementation(jarJar("com.github.ben-manes.caffeine:caffeine:3.2.0"))
+
+    compileOnly("one.tranic:t-proxy:1.0.1")
 }
 
 tasks.named('jarJar') {

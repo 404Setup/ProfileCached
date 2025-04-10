@@ -9,17 +9,6 @@ Cache online player profiles to reduce requests to the authentication server.
 
 **Non-OnlineMode and use of third-party Yggdrasil servers are not supported.**
 
-## Note!
-Although this is the Forge version, it is not available.
-
-**Why?**
-
-The Mixin logic in Forge seems to be different from Fabric, 
-which is also evidenced in YggdrasilProxy and BreedHorse, 
-where you can see that they use completely different Mixin logic (BreedHorse can only use EventSystem even).
-
-If you have a workaround, feel free to open an issue or make a pull request.
-
 ## What is the meaning of this mod?
 When your server is temporarily unable to connect to Mojang's verification server, 
 it is still able to provide available connections to players already in the cache.
