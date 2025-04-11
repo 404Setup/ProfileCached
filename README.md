@@ -20,16 +20,6 @@ where you can see that they use completely different Mixin logic (BreedHorse can
 
 If you have a workaround, feel free to open an issue or make a pull request.
 
-## What is the meaning of this mod?
-When your server is temporarily unable to connect to Mojang's verification server, 
-it is still able to provide available connections to players already in the cache.
-
-In addition, in servers with more daily active users, 
-it can also avoid verification server temporarily rejecting your IP by reducing the number of requests
-
-If you reload the configuration file using the command, the cache will be completely empty. 
-You need to think about it before doing this.
-
 ## Command
 - `/pfc reload`
 - `/pfc clean <playername>`
