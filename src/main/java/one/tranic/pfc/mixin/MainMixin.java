@@ -17,8 +17,7 @@ public class MainMixin {
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/server/Services;create(Lcom/mojang/authlib/yggdrasil/YggdrasilAuthenticationService;Ljava/io/File;)Lnet/minecraft/server/Services;"
-            ),
-            remap = false
+            )
     )
     private static Services createServices(YggdrasilAuthenticationService authenticationService, java.io.File file) {
         return Services.create(new PFCAuthenticationService(Proxy.NO_PROXY), file);
