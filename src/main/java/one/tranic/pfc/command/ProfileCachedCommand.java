@@ -16,14 +16,13 @@ import one.tranic.pfc.config.Config;
 @Mod.EventBusSubscriber(modid = ProfileCached.MODID)
 @SuppressWarnings("unused")
 public class ProfileCachedCommand {
-
-    private static final Component DISABLED = Component.literal("ProfileCached is not enabled!");
-    private static final Component RELOADED = Component.literal("ProfileCached has been reloaded!");
-
     @SubscribeEvent
     public static void onCommandRegister(RegisterCommandsEvent event) {
         register(event.getDispatcher());
     }
+
+    private static final Component DISABLED = Component.literal("ProfileCached is not enabled!");
+    private static final Component RELOADED = Component.literal("ProfileCached has been reloaded!");
 
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {

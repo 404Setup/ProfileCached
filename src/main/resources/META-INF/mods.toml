@@ -20,5 +20,5 @@ side = "SERVER"
 modId = "minecraft"
 mandatory = true
 versionRange = "${minecraft_version_range}"
-ordering = "NONE"
+ordering = "AFTER"
 side = "SERVER"
