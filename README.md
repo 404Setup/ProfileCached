@@ -5,9 +5,12 @@ ProfileCached
 
 Cache online player profiles to reduce requests to the authentication server.
 
-**This mod requires a server in OnlineMode to be enabled.**
+## Note
 
-**Non-OnlineMode and use of third-party Yggdrasil servers are not supported.**
+1. This mod is only available on servers.
+2. The server must have "Online Mode" enabled.
+3. This mod is NOT intended for servers using "offline mode" and unofficial authentication endpoints (**mods** or **agents** that allow the server to use or support multiple different Yggdrasil APIs at the same time)
+4. This mod does not work when you use a Proxy in front of your server (connecting multiple servers, like BungeeCord and Velocity).
 
 ## What is the meaning of this mod?
 When your server is temporarily unable to connect to Mojang's verification server, 
