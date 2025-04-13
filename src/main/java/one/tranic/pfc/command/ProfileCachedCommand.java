@@ -17,6 +17,9 @@ import one.tranic.pfc.config.Config;
 @SuppressWarnings("unused")
 public class ProfileCachedCommand {
 
+    private static final Component DISABLED = Component.literal("ProfileCached is not enabled!");
+    private static final Component RELOADED = Component.literal("ProfileCached has been reloaded!");
+
     @SubscribeEvent
     public static void onCommandRegister(RegisterCommandsEvent event) {
         register(event.getDispatcher());
@@ -50,7 +53,7 @@ public class ProfileCachedCommand {
     private static int reload(CommandSourceStack source) {
         Config.reload();
 
-        source.sendSuccess(() -> Component.translatable("tranic.pfc.command.reload"), true);
+        source.sendSuccess(() -> RELOADED, true);
         return 1;
     }
 
@@ -58,27 +61,27 @@ public class ProfileCachedCommand {
         var source = ctx.getSource();
         var cache = Config.getCachedMain().cache();
         if (cache == null) {
-            source.sendFailure(Component.translatable("tranic.pfc.disabled"));
+            source.sendFailure(DISABLED);
             return 0;
         }
         cache.invalidateAll();
-        source.sendSuccess(() -> Component.translatable("tranic.pfc.command.all_clean"), true);
+        source.sendSuccess(() -> Component.literal("All caches have been cleaned!"), true);
         return 1;
     }
 
     private static int cleanPlayer(CommandContext<CommandSourceStack> ctx, String player) {
         var source = ctx.getSource();
         if (Config.getCachedMain().cache() == null) {
-            source.sendFailure(Component.translatable("tranic.pfc.disabled"));
+            source.sendFailure(DISABLED);
             return 0;
         }
         var result = Config.getCachedMain().cache().getIfPresent(player);
         if (result == null) {
-            source.sendFailure(Component.translatable("tranic.pfc.command.not_cached", player));
+            source.sendFailure(Component.literal("Player " + player + " is not cached!"));
             return 0;
         }
         Config.getCachedMain().cache().invalidate(player);
-        source.sendSuccess(() -> Component.translatable("tranic.pfc.command.cached_clean", player), true);
+        source.sendSuccess(() -> Component.literal("Cache for player " + player + " has been cleaned!"), true);
         return 1;
     }
 
@@ -86,10 +89,10 @@ public class ProfileCachedCommand {
         var source = ctx.getSource();
         var cache = Config.getCachedMain().cache();
         if (cache == null) {
-            source.sendFailure(Component.translatable("tranic.pfc.disabled"));
+            source.sendFailure(DISABLED);
             return 0;
         }
-        source.sendSuccess(() -> Component.translatable("tranic.pfc.command.size_result", cache.estimatedSize()), true);
+        source.sendSuccess(() -> Component.literal("Profile Cached Size: " + cache.estimatedSize()), true);
         return 1;
     }
 }

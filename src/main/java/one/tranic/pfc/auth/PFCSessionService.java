@@ -8,7 +8,6 @@ import com.mojang.authlib.yggdrasil.ProfileResult;
 import com.mojang.authlib.yggdrasil.ServicesKeySet;
 import com.mojang.authlib.yggdrasil.YggdrasilEnvironment;
 import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
-import net.minecraft.network.chat.Component;
 import one.tranic.pfc.ProfileCached;
 import one.tranic.pfc.config.Config;
 import one.tranic.pfc.config.mods.PlayData;
@@ -45,9 +44,9 @@ public class PFCSessionService extends YggdrasilMinecraftSessionService {
                 ) {
                     if (config.debug())
                         ProfileCached.LOGGER.info(
-                                Component.translatable("tranic.pfc.session.hit_failed", profileName, serverId,
-                                        address.getHostAddress(), cached.lastLoginIP()).getString()
-                        );
+                                "Hit Cache, but IPs do not match: username={}, serverId={}, address={}, cachedIP={}",
+                                profileName, serverId,
+                                address.getHostAddress(), cached.lastLoginIP());
 
                     // If the player's IP changes during the caching period, then invalidate the cache.
                     // Call return here to continue with the original validation logic.
@@ -57,8 +56,8 @@ public class PFCSessionService extends YggdrasilMinecraftSessionService {
                 }
                 if (config.debug())
                     ProfileCached.LOGGER.info(
-                            Component.translatable("tranic.pfc.session.hit_success",
-                                    profileName, serverId, cached.lastLoginIP()).getString()
+                            "Hit Cache: username={}, serverId={}, address={}",
+                            profileName, serverId, cached.lastLoginIP()
                     );
                 return cached.profile();
             }
@@ -77,8 +76,8 @@ public class PFCSessionService extends YggdrasilMinecraftSessionService {
                                     : null));
             if (config.debug())
                 ProfileCached.LOGGER.info(
-                        Component.translatable("tranic.pfc.session.cached_saved", profileName,
-                                serverId, playerAddress).getString()
+                        "Cache is saved: username={}, serverId={}, address={}", profileName,
+                        serverId, playerAddress
                 );
         }
         return result;
