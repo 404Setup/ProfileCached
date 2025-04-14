@@ -9,7 +9,7 @@ Cache online player profiles to reduce requests to the authentication server.
 
 1. This mod is only available on servers.
 2. The server must have "Online Mode" enabled.
-3. This mod is NOT intended for servers using "offline mode" and unofficial authentication endpoints (**mods** or **agents** that allow the server to use or support multiple different Yggdrasil APIs at the same time)
+3. This mod is NOT intended for servers using "offline mode" and unofficial authentication endpoints (Allow servers to use the unofficial Yggdrasil API **Mod** or **Agent**)
 4. This mod does not work when you use a Proxy in front of your server (connecting multiple servers, like BungeeCord and Velocity).
 
 ## What is the meaning of this mod?
