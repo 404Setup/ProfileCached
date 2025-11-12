@@ -2,7 +2,6 @@ package one.tranic.pfc.config;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.mojang.authlib.yggdrasil.ProfileResult;
 import net.fabricmc.loader.api.FabricLoader;
 import one.tranic.pfc.config.mods.CachedMain;
 import one.tranic.pfc.config.mods.PlayData;
