@@ -7,6 +7,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.permissions.Permission;
+import net.minecraft.server.permissions.PermissionLevel;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -28,7 +30,8 @@ public class ProfileCachedCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         var rootCommand = Commands.literal("pfc")
-                .requires((source) -> source.hasPermission(3));
+                .requires((source) -> source.permissions()
+                        .hasPermission(new Permission.HasCommandLevel(PermissionLevel.byId(3))));
 
         rootCommand.then(Commands.literal("reload")
                 .executes((ctx) -> reload(ctx.getSource()))
