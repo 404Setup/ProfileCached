@@ -1,5 +1,5 @@
 plugins {
-    id("fabric-loom") version "1.13-SNAPSHOT"
+    id("net.fabricmc.fabric-loom") version "1.15-SNAPSHOT"
     id("maven-publish")
 }
 
@@ -10,7 +10,7 @@ base {
     archivesName.set(project.property("archives_base_name") as String)
 }
 
-val targetJavaVersion = 21
+val targetJavaVersion = 25
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
     withSourcesJar()
@@ -23,13 +23,10 @@ repositories {
 
 dependencies {
     minecraft("com.mojang:minecraft:${project.property("minecraft_version")}")
-    mappings(loom.officialMojangMappings())
-    modImplementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
-
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_version")}")
-
-    modImplementation(include("com.github.Carleslc.Simple-YAML:Simple-Yaml:1.8.4")!!)
-    modImplementation(include("com.github.ben-manes.caffeine:caffeine:3.2.0")!!)
+    implementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
+    implementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_api_version")}")
+    implementation(include("com.github.Carleslc.Simple-YAML:Simple-Yaml:1.8.4")!!)
+    implementation(include("com.github.ben-manes.caffeine:caffeine:3.2.0")!!)
 }
 
 tasks.processResources {
